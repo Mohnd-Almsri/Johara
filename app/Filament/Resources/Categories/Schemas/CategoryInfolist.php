@@ -30,7 +30,7 @@ class CategoryInfolist
                         : null
                     )
                     ->openUrlInNewTab()
-                    ->extraAttributes(['class' => 'cursor-zoom-in'])// يخلي الصورة دائرية، احذفها لو بدك الصورة مربعة
+                    ->extraAttributes(['class' => 'cursor-zoom-in'])// يخلي الصورة دائرية، احذفها لو بدك الصورة
                 ,
             ])->columns(2)->columnSpanFull()
             ]);
