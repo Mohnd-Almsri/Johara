@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('body');
-            $table->unsignedInteger('order')->default(0);
+            $table->string('image')->nullable();
+            $table->integer('order')->default(0)->index(); // لترتيب الفقرات
             $table->foreignId('article_id')->constrained('articles')->cascadeOnDelete();
             $table->timestamps();
         });

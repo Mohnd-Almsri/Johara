@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Blog;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArticleRequest;
+use App\Http\Resources\ArticleResource;
 use App\Models\Blog\Article;
 use App\Services\ArticleService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -21,9 +22,9 @@ class ArticleController extends Controller
     public function index()
     {
         try {
-            $articles = Article::with('paragraphs.images')->get();
+            $articles = Article::with('paragraphs')->get();
             return response()->json([
-                'articles' => $articles
+                'articles' => ArticleResource::collection($articles),
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -32,15 +33,13 @@ class ArticleController extends Controller
         }
     }
 
-    public function show(Request $request)
+    public function show(Article $article)
     {
-        $request->validate([
-            'id' => 'required|exists:articles,id'
-        ]);
+
         try {
-            $article = Article::where('id', $request->id)->with('paragraphs.images')->get();
+       $article->load('paragraphs');
             return response()->json([
-                'article' => $article
+                'article' => new ArticleResource($article),
 
             ]);
         } catch (\Exception $e) {

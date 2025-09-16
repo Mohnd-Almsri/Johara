@@ -16,17 +16,30 @@ class projectInfolist
     {
         return $schema
             ->components([
-                Section::make('details')->description('project details .')->schema([
-                    TextEntry::make('name')->label('Name :')->badge(),
-                    TextEntry::make('location')->label('Location :')->badge(),
-                    TextEntry::make('date')->label('Date :')->badge(),
-                    TextEntry::make('contractor')->label('Contractor :')->badge(),
-                    TextEntry::make('description')->label('Description :')->badge(),
-                    TextEntry::make('category.name')->label('Category :')->badge(),
-                    TextEntry::make('created_at')->badge()
-                        ->label('added to website at : ')
-                        ->dateTime(),
-                ])->columns(3)->columnSpanFull(),
+                Section::make('details')
+                    ->description('project details .')
+                    ->schema([
+                        TextEntry::make('name')->label('Name :')->badge(),         // قصير = badge OK
+                        TextEntry::make('location')->label('Location :')->badge(), // قصير = badge OK
+                        TextEntry::make('date')->label('Date :')->badge(),         // قصير = badge OK
+                        TextEntry::make('contractor')->label('Contractor :')->badge(),
+                        TextEntry::make('category.name')->label('Category :')->badge(),
+                        TextEntry::make('created_at')
+                            ->label('added to website at : ')
+                            ->dateTime()->badge(), // ما له داعي badge
+
+                        // الوصف: بلا badge، مع تنسيق نص وتفاف أسطر وأخذ سطر كامل
+                        TextEntry::make('description')
+                            ->label('Description :')
+                            ->prose()                // Typography لطيفة
+                            // ->markdown()         // فعّلها إذا الوصف Markdown
+                            ->columnSpanFull()
+                            ->extraAttributes([
+                                'class' => 'break-words whitespace-pre-line', // لفّ الأسطر واحترم \n
+                            ]),
+                    ])
+                    ->columns(3)
+                    ->columnSpanFull(),
                 Section::make('Details')
                     ->schema([
                         RepeatableEntry::make('details')

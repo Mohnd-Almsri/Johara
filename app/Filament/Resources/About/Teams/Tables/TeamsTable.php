@@ -17,9 +17,15 @@ class TeamsTable
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('name')
+                    ->sortable()
                     ->searchable(),
+
                 TextColumn::make('role')
+                    ->sortable()
                     ->searchable(),
                 ImageColumn::make('image')->disk('public')->size(75)->circular(),
 

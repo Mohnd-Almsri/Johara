@@ -20,9 +20,11 @@ class TeamResource extends Resource
 {
     protected static ?string $model = Team::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Users;
 
     protected static ?string $recordTitleAttribute = 'Team';
+    protected static ?int $navigationSort =4;
+
 
     public static function form(Schema $schema): Schema
     {

@@ -15,7 +15,6 @@ $contact = DB::transaction(function () use ($request) {
         'last_name' => $request->last_name,
         'email' => $request->email,
         'phone' => $request->phone,
-        'is_read' => false,
         'read_at' => now(),
         'message' => $request->message,
     ]);

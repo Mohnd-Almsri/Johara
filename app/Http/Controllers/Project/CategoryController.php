@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Projects\Category;
 use Illuminate\Http\Request;
 use App\Trait\ImagePathTrait;
@@ -24,10 +25,9 @@ class CategoryController extends Controller
                     'categories' => []
                 ], 200);
             }
-
             return response()->json([
                 'message' => 'Success',
-                'categories' => $categories
+                'categories' => CategoryResource::collection($categories),
             ]);
 
         } catch (\Exception $e) {
@@ -37,19 +37,15 @@ class CategoryController extends Controller
         }
     }
 
-    public function show(Request $request)
+    public function show(Category $category)
     {
-        $request->validate([
-            'id' => 'required|integer|exists:categories,id'
-        ], [
-            'id.required' => 'Category id cannot be empty.',
-            'id.exists' => 'Category id does not exist.',
-        ]);
         try {
-            $category = Category::whereId($request->id)->with('projects')->first();
+            $data = Category::whereId($category->id)->with('projects.category','projects.images')->first();
+
             return response()->json([
                 'message' => 'Success',
-                'category' => $category]);
+                'category' => (new CategoryResource($data))->withRelations(true)]);
+//                'category' =>$data]);
 
 
         } catch (\Exception $e) {

@@ -56,8 +56,8 @@ class Project extends Model
     protected function mainImageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value
-                ? Storage::disk('public')->url($value)  // يتحوّل لـ http://.../storage/...
+            get: fn () => ! empty($this->attributes['mainImage'])
+                ? Storage::disk('public')->url($this->attributes['mainImage'])
                 : null,
         );
     }

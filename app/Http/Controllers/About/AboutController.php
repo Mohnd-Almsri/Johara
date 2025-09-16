@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\About;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ServiceResource;
+use App\Http\Resources\TeamResource;
 use App\Models\About\About;
 use App\Models\About\Service;
 use App\Models\About\Team;
@@ -18,7 +20,7 @@ class AboutController extends Controller
 {
     use ImagePathTrait;
 
-    protected $AboutService, $TeamService,$ServiceService;
+    protected $AboutService, $TeamService, $ServiceService;
 
     public function __construct(AboutService $AboutService, TeamService $TeamService, ServiceService $ServiceService)
     {
@@ -26,34 +28,35 @@ class AboutController extends Controller
         $this->TeamService = $TeamService;
         $this->ServiceService = $ServiceService;
     }
-public function index(){
-    try {
-         $about = About::get()->first();
-        if($about){
-            $about->images->each(function($image){
-            unset($image->imageable_type);
-            unset($image->imageable_id);
-        });}
 
-         $team = Team::all();
-         $services = Service::all();
-         return response()->json([
-            'message'=>'all data',
-             'about' => $about,
-             'team' => $team,
-             'services' => $services,
-         ]);
+    public function index()
+    {
+        try {
+            $about = About::get()->first();
+            if ($about) {
+                $about->images->each(function ($image) {
+                    unset($image->imageable_type);
+                    unset($image->imageable_id);
+                });
+            }
 
-    }catch (\Exception $e){
+            $team = Team::all();
+            $services = Service::all();
+            return response()->json([
+                'message' => 'all data',
+                'about' => $about,
+                'team' => TeamResource::collection($team),
+                'services' => ServiceResource::collection($services),
+            ]);
+
+        } catch (\Exception $e) {
             return response()->json([
                 "status" => "failed",
                 "message" => $e->getMessage()]);
+        }
+
+
     }
-
-
-
-
-}
 
     //about us section
     public function about()
@@ -122,7 +125,7 @@ public function index(){
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ],$e->getCode());
+            ], $e->getCode());
         }
 
 
@@ -146,25 +149,26 @@ public function index(){
             ]);
         }
     }
-    public function addImage(Request $request){
+
+    public function addImage(Request $request)
+    {
         $request->validate([
-            'id'=>'required|integer|exists:abouts,id',
-            'image'=>'required|image|mimes:jpeg,jpg,png'
+            'id' => 'required|integer|exists:abouts,id',
+            'image' => 'required|image|mimes:jpeg,jpg,png'
         ]);
         try {
             $about = $this->AboutService->addImage($request);
             return response()->json([
-                    'message' => "image added successfully!",
+                'message' => "image added successfully!",
                 'about' => $about->load('images')
 
             ]);
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
 
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ],$e->getCode());
+            ], $e->getCode());
         }
     }
 
@@ -174,7 +178,8 @@ public function index(){
         try {
             $team = Team::get();
             return response()->json([
-                'data' => $team
+                'status' => 'success',
+                'data' => TeamResource::collection($team)
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -184,16 +189,14 @@ public function index(){
         }
     }
 
-    public function teamShow(Request $request){
-        $request->validate([
-            'id' => 'required|integer|exists:teams,id'
+    public function teamShow(Team $member)
+    {
 
-        ]);
         try {
-            $team = Team::findOrFail($request->id);
             return response()->json([
-                'message'=>'team',
-                'data' => $team
+                'status' => 'success',
+                'message' => 'team',
+                'data' => new TeamResource($member)
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -266,11 +269,12 @@ public function index(){
     }
 
     //service section
-    Public function service(){
+    public function service()
+    {
         try {
-            $services= Service::get();
+            $services = Service::get();
             return response()->json([
-                'data' => $services
+                'data' => ServiceResource::collection($services)
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -279,16 +283,14 @@ public function index(){
             ]);
         }
     }
-    public function serviceShow(Request $request){
-        $request->validate([
-            'id' => 'required|integer|exists:services,id'
 
-        ]);
+    public function serviceShow(Service $service)
+    {
         try {
-            $service = Service::findOrFail($request->id);
+
             return response()->json([
-                'message'=>'service',
-                'data' => $service
+                'message' => 'service',
+                'data' => new ServiceResource($service)
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -297,7 +299,9 @@ public function index(){
             ]);
         }
     }
-    Public function serviceCreate(Request $request){
+
+    public function serviceCreate(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|unique:services,name',
             'description' => 'required|string',
@@ -310,19 +314,21 @@ public function index(){
                 'service' => $service
 
             ]);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
         }
     }
-    Public function serviceUpdate(Request $request){
+
+    public function serviceUpdate(Request $request)
+    {
         $request->validate([
             'id' => 'required|integer|exists:services,id',
-            'name'=>'nullable|string|unique:services,name,'.$request->id,
-            'description'=>'nullable|string',
-            'image'=>'nullable|image|mimes:jpeg,jpg,png',
+            'name' => 'nullable|string|unique:services,name,' . $request->id,
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png',
         ]);
         try {
 
@@ -331,14 +337,16 @@ public function index(){
                 'message' => "service updated successfully!",
                 'service' => $service
             ]);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
         }
     }
-    Public function serviceDelete(Request $request){
+
+    public function serviceDelete(Request $request)
+    {
         $request->validate([
             'id' => 'required|integer|exists:services,id'
         ]);
@@ -347,7 +355,7 @@ public function index(){
             return response()->json([
                 'message' => "service deleted successfully!"
             ]);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()

@@ -20,9 +20,10 @@ class projectResource extends Resource
 {
     protected static ?string $model = project::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::BuildingOffice2;
 
     protected static ?string $recordTitleAttribute = 'Projects';
+    protected static ?int $navigationSort =2;
 
     public static function form(Schema $schema): Schema
     {
@@ -51,7 +52,7 @@ class projectResource extends Resource
         return [
             'index' => Listprojects::route('/'),
             'create' => Createproject::route('/create'),
-//            'view' => Viewproject::route('/{record}'),
+            'view' => Viewproject::route('/{record}'),
             'edit' => Editproject::route('/{record}/edit'),
         ];
     }

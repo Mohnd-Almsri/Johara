@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Contacts\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -16,12 +17,13 @@ class ContactsTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->columns([
+                ->columns([
 
-                TextColumn::make('first_name')->label('First Name :')->searchable(),
-                TextColumn::make('last_name')->label('Last Name :')->searchable(),
-                TextColumn::make('phone')->label('Phone :')->searchable(),
-                TextColumn::make('email')->label('Email :')->searchable(),
+                TextColumn::make('id')->label('ID')->sortable()->searchable(),
+                TextColumn::make('first_name')->label('First Name')->searchable(),
+                TextColumn::make('last_name')->label('Last Name')->searchable(),
+                TextColumn::make('phone')->label('Phone')->searchable(),
+                TextColumn::make('email')->label('Email')->searchable(),
                 TextColumn::make('message')->label('Message')->limit(50)->searchable(),
                 TextColumn::make('is_read')
                     ->label('Replied')
@@ -36,6 +38,7 @@ class ContactsTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                deleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

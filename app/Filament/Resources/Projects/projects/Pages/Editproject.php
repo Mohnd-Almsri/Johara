@@ -24,7 +24,7 @@ class Editproject extends EditRecord
         /** @var \App\Models\Projects\Project $record */
         $record = $this->record;
         $state  = $this->form->getState();
-
+//dd($state);
         $newInterior = array_values($state['interior_images'] ?? []);
         $newExterior = array_values($state['exterior_images'] ?? []);
 

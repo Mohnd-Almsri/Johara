@@ -16,20 +16,18 @@ Route::get('/user', function (Request $request) {
 
     Route::controller(CategoryController::class)->prefix('category')->group(function () {
         Route::get('/', 'index');
-        Route::get('/show/{category}', function (\App\Models\Projects\Category $category){
-            return $category;
-        });
-        Route::post('/store', 'store');
-        Route::post('/update', 'update');
-        Route::delete('/delete', 'delete');
+        Route::get('/{category}','show');
+//        Route::post('/store', 'store');
+//        Route::post('/update', 'update');
+//        Route::delete('/delete', 'delete');
     });
 
-    Route::controller(ProjectController::class)->prefix('project')->group(function () {
+    Route::controller(ProjectController::class)->prefix('projects')->group(function () {
         Route::get('/', 'index');
-        Route::get('/show', 'show');
-        Route::post('/create', 'store');
-        Route::post('/update', 'update');
-        Route::delete('/delete', 'delete');
+        Route::get('/{project}', 'show');
+//        Route::post('/create', 'store');
+//        Route::post('/update', 'update');
+//        Route::delete('/delete', 'delete');
     });
 
 Route::controller(AboutController::class)->prefix('about')->group(function () {
@@ -45,47 +43,47 @@ Route::controller(AboutController::class)->prefix('about')->group(function () {
 
     //team section
     Route::get('/team', 'team');
-    Route::get('/team/show', 'teamShow');
-    Route::post('/team/create', 'teamCreate');
-    Route::post('/team/update', 'teamUpdate');
-    Route::delete('/team/delete', 'teamDelete');
+    Route::get('/team/{member}', 'teamShow');
+//    Route::post('/team/create', 'teamCreate');
+//    Route::post('/team/update', 'teamUpdate');
+//    Route::delete('/team/delete', 'teamDelete');
 
     // services section
-    Route::get('/service', 'service');
-    Route::get('/service/show', 'serviceShow');
-    Route::post('/service/create', 'serviceCreate');
-    Route::post('/service/update', 'serviceUpdate');
-    Route::delete('/service/delete', 'serviceDelete');
+    Route::get('/services', 'service');
+    Route::get('/services/{service}', 'serviceShow');
+//    Route::post('/service/create', 'serviceCreate');
+//    Route::post('/service/update', 'serviceUpdate');
+//    Route::delete('/service/delete', 'serviceDelete');
 
 
 });
 Route::prefix('blog')->group(function () {
 
-    Route::controller(CeoController::class)->prefix('ceo')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/show', 'show');
-        Route::post('/addImage', 'addImage');
-        Route::post('/update', 'update');
-        Route::post('/create', 'create');
-        Route::delete('/delete', 'delete');
-    });
+//    Route::controller(CeoController::class)->prefix('ceo')->group(function () {
+//        Route::get('/', 'index');
+//        Route::get('/show', 'show');
+//        Route::post('/addImage', 'addImage');
+//        Route::post('/update', 'update');
+//        Route::post('/create', 'create');
+//        Route::delete('/delete', 'delete');
+//    });
 
-    Route::controller(articleController::class)->prefix('article')->group(function () {
+    Route::controller(articleController::class)->prefix('articles')->group(function () {
         Route::get('/', 'index');
-        Route::get('/show', 'show');
-        Route::post('/update', 'updateArticle');
-        Route::post('/update-or-add-paragraph', 'createOrUpdateParagraph');
-        Route::post('/create', 'create');
-        Route::delete('/deleteArticle', 'deleteArticle');
-        Route::delete('/deleteParagraph', 'deleteParagraph');
+        Route::get('/{article}', 'show');
+//        Route::post('/update', 'updateArticle');
+//        Route::post('/update-or-add-paragraph', 'createOrUpdateParagraph');
+//        Route::post('/create', 'create');
+//        Route::delete('/deleteArticle', 'deleteArticle');
+//        Route::delete('/deleteParagraph', 'deleteParagraph');
     });
 
 
 });
 
-Route::controller(ContactController::class)->prefix('contact')->group(function () {
-    Route::get('/', 'index');
-    Route::post('/create', 'create');
-    Route::post('/mark-as-read', 'markAsRead');
-    Route::delete('/delete', 'delete');
+Route::controller(ContactController::class)->prefix('contact-us')->group(function () {
+//    Route::get('/', 'index');
+    Route::post('/', 'create');
+//    Route::post('/mark-as-read', 'markAsRead');
+//    Route::delete('/delete', 'delete');
 });

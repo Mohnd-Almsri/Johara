@@ -41,9 +41,10 @@ class Team extends Model
     protected function imageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value
-                ? Storage::disk('public')->url($value)  // يتحوّل لـ http://.../storage/...
+            get: fn () => !empty($this->attributes['image'])
+                ? Storage::disk('public')->url($this->attributes['image'])
                 : null,
+
         );
     }
 

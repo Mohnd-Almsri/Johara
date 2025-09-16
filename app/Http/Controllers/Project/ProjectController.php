@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProjectResource;
 use App\Models\Projects\Project;
 use App\Services\ArticleService;
 use App\Services\ProjectService;
@@ -18,49 +19,32 @@ class ProjectController extends Controller
     }
     public function index()
     {
+        $projects = Project::with('category','images')->get();
+        if ($projects->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No projects found',
+            ],404);
+        }
+        return response()->json([
+            'status' => 'success',
+            'projects' => ProjectResource::collection($projects),
+        ],200);
     }
 
-    public function show(Request $request)
+    public function show(Project $project)
     {
-        $request->validate([
-            'id' => 'required|integer|exists:projects,id',
-        ]);
         try {
-            $project = Project::where('id', $request->id)->first();
-            if (!$project) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Project not found',
-                ], 404);
-            }
-            $project->load('images');
 
-            $groupedImages = collect($project->images)->groupBy('type')->map(function ($images) {
-                return $images->map(function ($image) {
-                    return [
-                        'id' => $image->id,
-                        'path' => $image->path,
-                    ];
-                })->values(); // مهم: لتضمن يرجع Array مرتّب بدون key فاضي
-            });
+            $project->load('images','category');
 
-            $response = [
-                'id' => $project->id,
-                'name' => $project->name,
-                'description' => $project->description,
-                'location' => $project->location,
-                'date' => $project->date,
-                'contractor' => $project->contractor,
-                'category_id' => $project->category_id,
-                'details' => $project->details,
-                'images' => [
-                    'exterior' => $groupedImages->get('exterior', collect())->toArray(),
-                    'interior' => $groupedImages->get('interior', collect())->toArray(),
-                ],
-            ];
+            $recommended=Project::where('id','!=',$project->id)->where('category_id','=',$project->category_id)->select('id','name','location','mainImage')->limit(5)->get();
 
-
-            return response()->json(['data' => $response], 200);
+            return response()->json([
+                'status' => 'success',
+                'project' => new ProjectResource($project),
+                'recommended' => $recommended,
+            ], 200);
 
 
 

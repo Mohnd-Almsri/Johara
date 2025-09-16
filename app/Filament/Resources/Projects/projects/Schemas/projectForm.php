@@ -22,6 +22,7 @@ class projectForm
 
                 Textarea::make('description')
                     ->label('Description')
+                    ->rows(5)
                     ->required()
                     ->columnSpanFull(),
 

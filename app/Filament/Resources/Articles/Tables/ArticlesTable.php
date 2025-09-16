@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\About\Services\Tables;
+namespace App\Filament\Resources\Articles\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -10,24 +10,18 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use function Laravel\Prompts\text;
 
-class ServicesTable
+class ArticlesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('id')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('description')
-                    ->searchable()
-                    ->limit(50),
-                ImageColumn::make('image')->disk('public')->size(75)->circular(),
-
+                TextColumn::make('id')->label('Id')->searchable(),
+                TextColumn::make('title')->label('Title')->limit(50)->searchable(),
+                TextColumn::make('description')->label('description')->limit(50)->searchable(),
+                ImageColumn::make('image')->label('Cover image')->disk('public')->size(75)->circular(),
             ])
             ->filters([
                 //
