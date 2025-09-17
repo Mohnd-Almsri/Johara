@@ -17,8 +17,11 @@ class ProjectResource extends JsonResource
         return [
             'id'=>$this->id,
             'name'=>$this->name,
-            'description'=>$this->description,
-            'date'=>$this->id,
+            'main_description'=>$this->main_description,
+            'second_description'=>$this->second_description,
+            'third_description'=>$this->third_description,
+            'date'=>$this->date,
+            'location'=>$this->location,
             'contractor'=>$this->contractor,
             'category_name'=>$this->whenLoaded('category',fn()=>$this->category->name),
             'details'=>$this->details,

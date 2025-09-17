@@ -23,16 +23,24 @@ class projectInfolist
                         TextEntry::make('location')->label('Location :')->badge(), // قصير = badge OK
                         TextEntry::make('date')->label('Date :')->badge(),         // قصير = badge OK
                         TextEntry::make('contractor')->label('Contractor :')->badge(),
-                        TextEntry::make('category.name')->label('Category :')->badge(),
-                        TextEntry::make('created_at')
-                            ->label('added to website at : ')
-                            ->dateTime()->badge(), // ما له داعي badge
+                        TextEntry::make('category.name')->label('Project Type :')->badge(),
 
                         // الوصف: بلا badge، مع تنسيق نص وتفاف أسطر وأخذ سطر كامل
-                        TextEntry::make('description')
-                            ->label('Description :')
-                            ->prose()                // Typography لطيفة
-                            // ->markdown()         // فعّلها إذا الوصف Markdown
+                        TextEntry::make('main_description')
+                            ->label('Main Description :')
+                            ->columnSpanFull()
+                            ->extraAttributes([
+                                'class' => 'break-words whitespace-pre-line', // لفّ الأسطر واحترم \n
+                            ]),
+
+                        TextEntry::make('second_description')
+                            ->label('Second Description :')
+                            ->columnSpanFull()
+                            ->extraAttributes([
+                                'class' => 'break-words whitespace-pre-line', // لفّ الأسطر واحترم \n
+                            ]),
+                        TextEntry::make('third_description')
+                            ->label('Third Description :')
                             ->columnSpanFull()
                             ->extraAttributes([
                                 'class' => 'break-words whitespace-pre-line', // لفّ الأسطر واحترم \n

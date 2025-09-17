@@ -17,7 +17,7 @@ class ContactsTable
     public static function configure(Table $table): Table
     {
         return $table
-                ->columns([
+            ->columns([
 
                 TextColumn::make('id')->label('ID')->sortable()->searchable(),
                 TextColumn::make('first_name')->label('First Name')->searchable(),

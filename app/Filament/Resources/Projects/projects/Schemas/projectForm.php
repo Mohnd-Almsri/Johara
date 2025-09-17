@@ -18,10 +18,22 @@ class projectForm
             ->schema([
                 TextInput::make('name')
                     ->label('Name')
-                    ->required(),
+                    ->required()->columnSpanFull(),
 
-                Textarea::make('description')
-                    ->label('Description')
+                Textarea::make('main_description')
+                    ->label('Main Description')
+                    ->rows(5)
+                    ->required()
+                    ->columnSpanFull(),
+
+                Textarea::make('second_description')
+                    ->label('Second Description')
+                    ->rows(5)
+                    ->required()
+                    ->columnSpanFull(),
+
+                Textarea::make('third_description')
+                    ->label('Third Description')
                     ->rows(5)
                     ->required()
                     ->columnSpanFull(),
@@ -31,24 +43,8 @@ class projectForm
                     ->required(),
 
                 TextInput::make('date')
-                    ->label('Date')
+                    ->label('Completion Year')
                     ->required(),
-
-                Repeater::make('details')
-                    ->label('Details')
-                    ->schema([
-                        TextInput::make('title')
-                            ->label('Title')
-                            ->required(),
-                        Textarea::make('text')
-                            ->label('Text')
-                            ->rows(3)
-                            ->required(),
-                    ])
-                    ->collapsible()
-                    ->reorderable()
-                    ->addActionLabel('إضافة عنصر')
-                    ->columns(2)->columnSpanFull(),
 
                 TextInput::make('contractor')
                     ->label('Contractor')
@@ -61,6 +57,23 @@ class projectForm
                     ->required()
                     ->searchable()
                     ->native(false),
+
+
+                Repeater::make('details')
+                    ->label('Details')
+                    ->schema([
+                        TextInput::make('title')
+                            ->label('Title')
+                            ->required(),
+                        TextInput::make('text')
+                            ->label('Text')
+                            ->required(),
+                    ])
+                    ->collapsible()
+                    ->reorderable()
+                    ->addActionLabel('إضافة عنصر')
+                    ->columns(2)->columnSpanFull(),
+
 
                 FileUpload::make('mainImage')
                     ->label('Main Image :')

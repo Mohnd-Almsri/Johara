@@ -22,12 +22,12 @@ class CategoryController extends Controller
             if ($categories->isEmpty()) {
                 return response()->json([
                     'message' => 'No categories found.',
-                    'categories' => []
+                    'data' => []
                 ], 200);
             }
             return response()->json([
                 'message' => 'Success',
-                'categories' => CategoryResource::collection($categories),
+                'data' => CategoryResource::collection($categories),
             ]);
 
         } catch (\Exception $e) {
@@ -44,7 +44,7 @@ class CategoryController extends Controller
 
             return response()->json([
                 'message' => 'Success',
-                'category' => (new CategoryResource($data))->withRelations(true)]);
+                'data' => (new CategoryResource($data))->withRelations(true)]);
 //                'category' =>$data]);
 
 

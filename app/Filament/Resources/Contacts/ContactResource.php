@@ -24,7 +24,7 @@ class ContactResource extends Resource
 
 
     protected static ?string $recordTitleAttribute = 'Contact Us';
-    protected static ?int $navigationSort =6;
+    protected static ?int $navigationSort =8;
 
     public static function form(Schema $schema): Schema
     {

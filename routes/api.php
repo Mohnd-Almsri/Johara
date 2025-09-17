@@ -4,6 +4,7 @@ use App\Http\Controllers\About\AboutController;
 use App\Http\Controllers\Blog\ArticleController;
 use App\Http\Controllers\Blog\CeoController;
 use App\Http\Controllers\Contact\ContactController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\Project\CategoryController;
 use App\Http\Controllers\Project\ProjectController;
 use Illuminate\Http\Request;
@@ -35,11 +36,11 @@ Route::controller(AboutController::class)->prefix('about')->group(function () {
     Route::get('/', 'index');
 
     // about-us section
-    Route::get('/about-us', 'about');
-    Route::post('/about-us/addImage', 'addImage');
-    Route::post('/about-us/create', 'aboutCreate');
-    Route::post('/about-us/update', 'aboutUpdate');
-    Route::delete('/about-us/delete', 'aboutDelete');
+//    Route::get('/about-us', 'about');
+//    Route::post('/about-us/addImage', 'addImage');
+//    Route::post('/about-us/create', 'aboutCreate');
+//    Route::post('/about-us/update', 'aboutUpdate');
+//    Route::delete('/about-us/delete', 'aboutDelete');
 
     //team section
     Route::get('/team', 'team');
@@ -53,20 +54,21 @@ Route::controller(AboutController::class)->prefix('about')->group(function () {
     Route::get('/services/{service}', 'serviceShow');
 //    Route::post('/service/create', 'serviceCreate');
 //    Route::post('/service/update', 'serviceUpdate');
+
 //    Route::delete('/service/delete', 'serviceDelete');
 
 
 });
 Route::prefix('blog')->group(function () {
 
-//    Route::controller(CeoController::class)->prefix('ceo')->group(function () {
-//        Route::get('/', 'index');
+    Route::controller(CeoController::class)->prefix('ceo')->group(function () {
+        Route::get('/', 'index');
 //        Route::get('/show', 'show');
 //        Route::post('/addImage', 'addImage');
 //        Route::post('/update', 'update');
 //        Route::post('/create', 'create');
 //        Route::delete('/delete', 'delete');
-//    });
+    });
 
     Route::controller(articleController::class)->prefix('articles')->group(function () {
         Route::get('/', 'index');
@@ -78,6 +80,9 @@ Route::prefix('blog')->group(function () {
 //        Route::delete('/deleteParagraph', 'deleteParagraph');
     });
 
+    Route::controller(EventController::class)->prefix('events')->group(function () {
+        Route::get('/', 'index');
+    });
 
 });
 

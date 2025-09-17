@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Blog;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CeoResource;
 use App\Models\Blog\Ceo;
 use App\Services\CeoService;
 use Illuminate\Http\Request;
@@ -17,9 +18,10 @@ public function __construct(CeoService $CeoService)
 public function index()
     {
         try {
-            $ceos = Ceo::with('images')->get();
+            $ceo = Ceo::with('images')->latest()->first();
             return response()->json([
-                'ceos' => $ceos
+                'status'=>'success',
+                'data' => new CeoResource($ceo),
             ]);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
@@ -35,7 +37,7 @@ public function index()
             $ceo = Ceo::findOrFail($request->id);
             return response()->json([
                 'message' => 'success',
-                'ceo' => $ceo
+                'data' => $ceo
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
