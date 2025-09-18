@@ -38,7 +38,7 @@ class ProjectController extends Controller
 
             $project->load('images','category');
 
-            $recommended=Project::where('id','!=',$project->id)->where('category_id','=',$project->category_id)->select('id','name','location','mainImage')->limit(5)->get();
+            $recommended=Project::where('id','!=',$project->id)->where('category_id','=',$project->category_id)->select('id','name','location','mainImage')->inRandomOrder()->limit(5)->get();
 
             return response()->json([
                 'status' => 'success',
