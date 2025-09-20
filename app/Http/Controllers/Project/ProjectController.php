@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MiniProjectResource;
 use App\Http\Resources\ProjectResource;
 use App\Models\Projects\Project;
 use App\Services\ArticleService;
@@ -17,20 +18,18 @@ class ProjectController extends Controller
         $this->projectService = $service;
 
     }
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::with('category','images')->get();
-        if ($projects->isEmpty()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'No projects found',
-            ],404);
-        }
-        return response()->json([
-            'status' => 'success',
-            'projects' => ProjectResource::collection($projects),
-        ],200);
+        $perPage = (int) $request->get('perPage', 12);
+
+        $projects = Project::select('id','mainImage','name','location')
+            ->paginate($perPage);
+
+        return MiniProjectResource::collection($projects);
     }
+
+
+
 
     public function show(Project $project)
     {
@@ -43,7 +42,7 @@ class ProjectController extends Controller
             return response()->json([
                 'status' => 'success',
                 'project' => new ProjectResource($project),
-                'recommended' => $recommended,
+                'recommended' => MiniProjectResource::collection($recommended),
             ], 200);
 
 

@@ -19,19 +19,34 @@ class ArticleController extends Controller
         $this->articleService = $articleService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $request->get('perPage', 12);
+
         try {
-            $articles = Article::with('paragraphs')->get();
+            // جلب المقالات مع الأعمدة المطلوبة
+            $articles = Article::select('id', 'title', 'image', 'description')->paginate($perPage);
+
+            // تعديل الصورة وجعلها URL كامل
+            $articles->getCollection()->each(function ($article) {
+                $article->image = $article->image_url; // image_url يجب أن يكون Accessor في الموديل
+            });
+
+            // إرجاع استجابة JSON نظيفة
             return response()->json([
-                'articles' => ArticleResource::collection($articles),
-            ]);
+                'status' => 'success',
+                    'articles' => $articles,
+
+            ], 200);
+
         } catch (\Exception $e) {
             return response()->json([
+                'status' => 'error',
                 'message' => $e->getMessage()
             ], 500);
         }
     }
+
 
     public function show(Article $article)
     {
